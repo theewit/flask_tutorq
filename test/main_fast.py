@@ -17,7 +17,7 @@ class User(BaseModel):
 
 @app.get("/")
 def read_root():
-	return {"Hello": "World"}
+	return {"Hello": "maint Fast World"}
 
 @app.get("/items/{item_id}")
 def read_item(item_id: int, q: Optional[str] = None):
@@ -35,3 +35,20 @@ def update_item(item_id: int, item: Item, my_user: User):
 	my_second_user: User = User(**second_user_data)
 
 	return {"item_name": item.name, "item_price": item.price, "item_id": item_id, "user": my_second_user}
+
+
+#The order of path parameter is important
+@app.get("/users/me")
+async def read_user_me():
+	return {"user_id": get_user_id()}
+
+@app.get("/users/{user_id}")
+async def read_user(user_id: str):
+	return {"user_id": get_user_id(user_id)}
+
+def get_user_id(user_id: Optional[str] = None) -> str:
+	if user_id is None:
+		return "the current user"
+	else:
+		return user_id
+
